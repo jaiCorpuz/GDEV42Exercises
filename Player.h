@@ -45,7 +45,6 @@ class AttackingState : public PlayerState {
         void Update(Player& player, float delta_time) override;
             // Count down from active time
             // Transitions to Idle when count down ends
-        void Exit(Player& player) override; // Exit the state
 };
 
 class BlockingState : public PlayerState {
@@ -55,7 +54,6 @@ class BlockingState : public PlayerState {
             // As long as RMB is held, remmain in Blocking
             // Player cannot move
             // Return to Idle when RMB is released
-    
 };
 
 class DodgingState : public PlayerState {
@@ -85,6 +83,7 @@ class Player {
         Vector2 position;
         float radius;
         float speed;
+        Color color;
 
         StateMachine stateMachine;
 
@@ -100,6 +99,9 @@ class Player {
 
         void Update(float delta_time);
         void Draw() const;
+
+        void SetColor (Color c);
+        Color GetColor() const;
 
         void ChangeState(PlayerState* newState);
 
