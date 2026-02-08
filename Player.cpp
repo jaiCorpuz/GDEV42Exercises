@@ -9,6 +9,7 @@ Player::Player(Vector2 startPosition) {
     position = startPosition;
     radius = 40.0f;
     speed = 200.0f;
+    color = DARKBLUE;
 
     idle = new IdleState();
     moving = new MovingState();
@@ -32,7 +33,15 @@ void Player::Update(float delta_time) {
 }
 
 void Player::Draw() const {
-    DrawCircleV(position, radius, DARKBLUE);
+    DrawCircleV(position, radius, color);
+}
+
+void Player::SetColor(Color c) {
+    color = c;
+}
+
+Color Player::GetColor() const {
+    return color;
 }
 
 void Player::ChangeState(PlayerState* newState) {
@@ -69,7 +78,9 @@ void StateMachine::UpdateState(Player& player, float delta_time) {
     }
 }
 
-void IdleState::Enter(Player& player) {}
+void IdleState::Enter(Player& player) {
+    player.SetColor(DARKBLUE);
+}
 
 void IdleState::Update(Player& player, float delta_time) {
     bool isMoving = IsKeyDown(KEY_W) || IsKeyDown(KEY_A) || IsKeyDown(KEY_S) || IsKeyDown(KEY_D);
@@ -90,15 +101,12 @@ void IdleState::Update(Player& player, float delta_time) {
     }
 }
 
-void MovingState::Enter(Player& player) {}
+void MovingState::Enter(Player& player) {
+    player.SetColor(YELLOW);
+}
 
 void MovingState::Update(Player& player, float delta_time) {
     bool isMoving = IsKeyDown(KEY_W) || IsKeyDown(KEY_A) || IsKeyDown(KEY_S) || IsKeyDown(KEY_D);
-    if (!isMoving) {
-        player.ChangeState(player.GetIdleState());
-        return;
-    }
-    
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         player.ChangeState(player.GetAttackingState());
         return;
@@ -106,6 +114,11 @@ void MovingState::Update(Player& player, float delta_time) {
     
     if (IsKeyPressed(KEY_SPACE)) {
         player.ChangeState(player.GetDodgingState());
+        return;
+    }
+
+    if (!isMoving) {
+        player.ChangeState(player.GetIdleState());
         return;
     }
     
@@ -129,6 +142,7 @@ void MovingState::Update(Player& player, float delta_time) {
 
 void AttackingState::Enter(Player& player) {
     attack_timer = attack_duration;
+    player.SetColor(MAROON);
 }
 
 void AttackingState::Update(Player& player, float delta_time) {
@@ -140,9 +154,9 @@ void AttackingState::Update(Player& player, float delta_time) {
     }
 }
 
-void AttackingState::Exit(Player& player) {}
-
-void BlockingState::Enter(Player& player) {}
+void BlockingState::Enter(Player& player) {
+    player.SetColor(DARKGREEN);
+}
 
 void BlockingState::Update(Player& player, float delta_time) {
     if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
@@ -152,6 +166,7 @@ void BlockingState::Update(Player& player, float delta_time) {
 }
 
 void DodgingState::Enter(Player& player) {
+    player.SetColor(PINK);
     dodge_timer = dodge_duration;
     
     dodge_direction = {0,0};
@@ -166,6 +181,7 @@ void DodgingState::Enter(Player& player) {
         dodge_direction = {-1,0}; // Default dodge is to the left
     }
 }
+
 void DodgingState::Update(Player& player, float delta_time) {
     dodge_timer -= delta_time;
 
