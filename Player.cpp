@@ -9,7 +9,7 @@ Player::Player(Vector2 startPosition) {
     position = startPosition;
     radius = 40.0f;
     speed = 200.0f;
-    color = DARKBLUE;
+    color = ORANGE;
 
     idle = new IdleState();
     moving = new MovingState();
@@ -79,7 +79,7 @@ void StateMachine::UpdateState(Player& player, float delta_time) {
 }
 
 void IdleState::Enter(Player& player) {
-    player.SetColor(DARKBLUE);
+    player.SetColor(ORANGE);
 }
 
 void IdleState::Update(Player& player, float delta_time) {
@@ -95,7 +95,7 @@ void IdleState::Update(Player& player, float delta_time) {
         return;
     }
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
         player.ChangeState(player.GetBlockingState());
         return;
     }
@@ -166,7 +166,7 @@ void BlockingState::Update(Player& player, float delta_time) {
 }
 
 void DodgingState::Enter(Player& player) {
-    player.SetColor(PINK);
+    player.SetColor(MAGENTA);
     dodge_timer = dodge_duration;
     
     dodge_direction = {0,0};
