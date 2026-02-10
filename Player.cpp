@@ -155,7 +155,7 @@ void AttackingState::Update(Player& player, float delta_time) {
 }
 
 void BlockingState::Enter(Player& player) {
-    player.SetColor(DARKGREEN);
+    player.SetColor(BLACK);
 }
 
 void BlockingState::Update(Player& player, float delta_time) {
