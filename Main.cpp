@@ -1,5 +1,6 @@
 #include <raylib.h>
-#include "Player.h"
+#include "Player.cpp"
+#include "Player.hpp"
 
 const float WINDOW_WIDTH(800);
 const float WINDOW_HEIGHT(600);

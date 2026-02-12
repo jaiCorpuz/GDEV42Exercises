@@ -1,9 +1,4 @@
-#include "Player.h"
-
-// bool isMoving = IsKeyDown(KEY_W) || IsKeyDown(KEY_A) || IsKeyDown(KEY_S) || IsKeyDown(KEY_D);
-// bool isAttacking = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-// bool isBlocking = IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
-// bool isDodging = IsKeyPressed(KEY_SPACE);
+#include "Player.hpp"
 
 Player::Player(Vector2 startPosition) {
     position = startPosition;
