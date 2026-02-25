@@ -1,5 +1,5 @@
-Dungeon16.png
-TILE_COUNT 18
+IMAGE_NAME Dungeon16.png
+TILE_COUNT 17
 0 32 16 16  // Upper Left Corner wall Inner 0
 16 32 16 16 // Upper Middle wall Inner 1
 32 32 16 16 // Upper Right Corner wall Inner 2
@@ -10,18 +10,21 @@ TILE_COUNT 18
 48 48 16 16 // Rght Side Wall Outer 7
 64 48 16 16 // Left Side Wall Outer 8
 80 48 16 16 // Floor Upper Left Corner 9 
-96 48 16 16 // Floor Upper Middle 10 
-112 48 16 16 // Floor Upper Right Corner 11
-80 64 16 16 // Floor Middle Left 12
-96 64 16 16 // Floor Center 13 
-112 64 16 16 // Floor Middle Right 14 
-80 80 16 16 // Floor Lower Left Corner 15
-96 80 16 16 // Floor Lower Middle 16 
-112 80 16 16 // Floor Lower Right Corner 17
+96 48 16 16 // Floor Upper Right Corner 10 
+80 64 16 16 // Floor Lower Left Corner 11
+96 64 16 16 // Floor Lower Right Corner 12
+96 32 16 16 // Decorative floor 13
+0 64 16 16 // Lower Left Corner Outer 14
+32 64 16 16 // Lower Right Corner Outer 15
+48 16 16 16 // Stairs Going Down 16
 GRID 10 10
-0 1 1 1 2 0 1 1 1 2
-5 9 10 11 6 5 9 10 11 6
-5 12 13 14 7 8 12 13 14 6
-9 12 13 
-
-
+0 1 1 1 1 2 0 1 1 2
+5 9 10 9 10 6 5 9 10 6
+5 11 12 11 12 7 8 11 12 6
+5 9 10 9 10 13 13 13 13 6
+5 11 12 11 12 13 13 13 13 6
+5 13 13 13 13 13 13 13 13 6
+14 1 1 1 1 1 2 13 13 6
+0 1 1 1 1 1 15 13 13 6
+5 13 13 13 13 13 13 13 16 6
+14 1 1 1 1 1 1 1 1 15
