@@ -13,20 +13,16 @@ static ios_base::Init iostream_initializer;
 const float WINDOW_WIDTH(800);
 const float WINDOW_HEIGHT(600);
 const float playerSize = 20.0f;
+const float tileScale = 6.0f;
 
-Vector2 minEdge = {-500.0f, -500.0f};
-Vector2 maxEdge = {1300.0f, 1100.0f};
+Vector2 minEdge = {-200.0f, -400.0f};
+Vector2 maxEdge = {1000.0f, 1000.0f};
 
-struct Tile {
-    Vector2 positionStart;
-    Vector2 positionEnd;
-};
+
 
 int main() {
-    // SetConfigFlags(FLAG_WINDOW_HIGHDPI);
+    SetConfigFlags(FLAG_WINDOW_HIGHDPI);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "SuddenlyIDon'tKnowHowToBeCreative");
-
-    // Texture2D background = LoadTexture("onepiece.jpg");
 
     SetTargetFPS(60.0f);
     
@@ -38,18 +34,49 @@ int main() {
     camera_view.offset = {WINDOW_WIDTH /2 , WINDOW_HEIGHT / 2};
     camera_view.zoom = 1.0f;
 
+    string imageName;
+    vector<Rectangle> tileMap;
+    vector<vector<int>> grid;
+    int gridColumns = 0, gridRows = 0;
+
     ifstream file("settings.txt");
     string line;
-    vector<Tile> tiles;
-
-    // Vector2 minTarget = {minEdge.x, minEdge.y};
-    // Vector2 maxTarget = {maxEdge.x, maxEdge.y};
-    // camera_view.target = Vector2Clamp(camera_view.target, minTarget, maxTarget);
 
     while (getline(file, line)) {
         istringstream stream(line);
+        string key;
+        stream >> key;
 
+        if (key == "IMAGE_NAME") {
+            stream >> imageName;
+        } 
+        else if (key == "TILE_COUNT") {
+            int count;
+            stream >> count;
+            for (int i = 0; i < count; i++) {
+                float x, y, w, h;
+                getline(file, line);
+                istringstream tileStream(line);
+                tileStream >> x >> y >> w >> h;
+                tileMap.push_back({x, y, w, h});
+            }
+        }
+        else if (key == "GRID") {
+            stream >> gridColumns >> gridRows;
+            grid.resize(gridRows, vector<int>(gridColumns));
+            for (int y = 0; y < gridRows; y++) {
+                getline(file, line);
+                istringstream gridStream(line);
+                for (int x = 0; x < gridColumns; x++) {
+                    gridStream >> grid[y][x];
+                }
+            }
+        }
     }
+    file.close();
+
+    Texture2D tileSet = LoadTexture(imageName.c_str());
+
 
     while (!WindowShouldClose()) {
         float delta_time = GetFrameTime();
@@ -97,10 +124,27 @@ int main() {
         BeginDrawing();
         BeginMode2D(camera_view);
         ClearBackground(RAYWHITE);
-        DrawRectangle(120, 100, 30, 10, BLUE);
-        // DrawTexture(background, minEdge.x, minEdge.y, WHITE);
-        DrawCircle(position.x, position.y, 50.0f, DARKBLUE);
-        DrawCircleLines(position.x, position.y, 51.0f, BLACK);
+
+        for (int y = 0; y < gridRows; y++) {
+            for (int x = 0; x < gridColumns; x++) {
+                int tileID = grid[y][x];
+
+                if (tileID >= 0 && tileID < tileMap.size()) {
+                    Rectangle tile = tileMap[tileID];
+
+                    Rectangle position = {
+                        (float) x * (tile.width*tileScale),
+                        (float) y * (tile.height*tileScale),
+                        tile.width * tileScale,
+                        tile.height * tileScale
+                    };
+
+                    DrawTexturePro(tileSet, tile, position, {0, 0}, 0.0f, WHITE);
+                }
+            }
+        }
+        // DrawRectangle(120, 100, 40, 80, BLUE);
+        DrawCircle(position.x, position.y, 30.0f, DARKBLUE);
         EndMode2D();
         // Draw UI after EndMode2D
         EndDrawing();
@@ -109,3 +153,5 @@ int main() {
     CloseWindow();
     return 0;
 }
+
+// clang++ Main.cpp libraylib.a -std=c++17 \-framework Cocoa -framework IOKit -framework CoreVideo -framework OpenGL -framework Foundation -o map
